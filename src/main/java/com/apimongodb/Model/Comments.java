@@ -1,19 +1,12 @@
 package com.apimongodb.Model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
+import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.Year;
 
 @Document(collection = "Comment")
 @ToString
@@ -21,9 +14,10 @@ import java.time.Year;
 @Setter
 public class Comments {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    @NotBlank(message = "O CPF não pode ser vazio")
+    @CPF(groups= CPF.class)
+    @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "O CPF deve estar no formato 000.000.000-00")
+    private String cpf;
 
     @NotBlank(message = "O comentário não pode ser vazio")
     @Size(min = 5, message = "O comentário deve ter pelo menos 5 caracteres")
@@ -36,4 +30,6 @@ public class Comments {
     @Min(value = 1, message = "O ano deve ser maior que 1")
     private int year;
 }
+
+
 
